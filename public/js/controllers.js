@@ -51,7 +51,7 @@ angular.module('myApp.controllers', []).
         $scope.highPress = analogRounder(116,0.1);
         $scope.lowPress = analogRounder(117,0.1);
         $scope.capacity = analogRounder(144,10);
-        $scope.evapTemp = analogRounder(118,1);
+        $scope.evapTemp = analogRounder(118,0.1);
         $scope.fan = analogRounder(142,10);
         $scope.condTemp = analogRounder(119,0.1);
         $scope.maxCap = analogRounder(179,10);
@@ -149,7 +149,7 @@ angular.module('myApp.controllers', []).
         $scope.highPress = analogRounder(116,0.1);
         $scope.lowPress = analogRounder(117,0.1);
         $scope.capacity = analogRounder(144,10);
-        $scope.evapTemp = analogRounder(118,1);
+        $scope.evapTemp = analogRounder(118,0.1);
         $scope.fan = analogRounder(142,10);
         $scope.condTemp = analogRounder(119,0.1);
         $scope.maxCap = analogRounder(179,10);
@@ -247,7 +247,7 @@ angular.module('myApp.controllers', []).
         $scope.highPress = analogRounder(116,0.1);
         $scope.lowPress = analogRounder(117,0.1);
         $scope.capacity = analogRounder(144,10);
-        $scope.evapTemp = analogRounder(118,1);
+        $scope.evapTemp = analogRounder(118,0.1);
         $scope.fan = analogRounder(142,10);
         $scope.condTemp = analogRounder(119,0.1);
         $scope.maxCap = analogRounder(179,10);
@@ -345,7 +345,7 @@ angular.module('myApp.controllers', []).
         $scope.highPress = analogRounder(116,0.1);
         $scope.lowPress = analogRounder(117,0.1);
         $scope.capacity = analogRounder(144,10);
-        $scope.evapTemp = analogRounder(118,1);
+        $scope.evapTemp = analogRounder(118,0.1);
         $scope.fan = analogRounder(142,10);
         $scope.condTemp = analogRounder(119,0.1);
         $scope.maxCap = analogRounder(179,10);
@@ -443,7 +443,7 @@ angular.module('myApp.controllers', []).
         $scope.highPress = analogRounder(116,0.1);
         $scope.lowPress = analogRounder(117,0.1);
         $scope.capacity = analogRounder(144,10);
-        $scope.evapTemp = analogRounder(118,1);
+        $scope.evapTemp = analogRounder(118,0.1);
         $scope.fan = analogRounder(142,10);
         $scope.condTemp = analogRounder(119,0.1);
         $scope.maxCap = analogRounder(179,10);
@@ -541,7 +541,7 @@ angular.module('myApp.controllers', []).
         $scope.highPress = analogRounder(116,0.1);
         $scope.lowPress = analogRounder(117,0.1);
         $scope.capacity = analogRounder(144,10);
-        $scope.evapTemp = analogRounder(118,1);
+        $scope.evapTemp = analogRounder(118,0.1);
         $scope.fan = analogRounder(142,10);
         $scope.condTemp = analogRounder(119,0.1);
         $scope.maxCap = analogRounder(179,10);
@@ -639,7 +639,7 @@ angular.module('myApp.controllers', []).
         $scope.highPress = analogRounder(116,0.1);
         $scope.lowPress = analogRounder(117,0.1);
         $scope.capacity = analogRounder(144,10);
-        $scope.evapTemp = analogRounder(118,1);
+        $scope.evapTemp = analogRounder(118,0.1);
         $scope.fan = analogRounder(142,10);
         $scope.condTemp = analogRounder(119,0.1);
         $scope.maxCap = analogRounder(179,10);

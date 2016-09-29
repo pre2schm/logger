@@ -88,7 +88,7 @@ function webboardData(a){
 
 				appState = analogRounder(133,1)
 				
-				if(appState === 0.6){
+				if(appState === 0.5){
 					defrostTime = (new Date).getTime();
 					defrostElapse = 0;
 				} else if(defrostTime===0){

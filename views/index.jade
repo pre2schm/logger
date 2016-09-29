@@ -3,24 +3,24 @@ extends layout
 block body
   div(ng-controller='AppCtrl')
     h2 GES Climate Rooms
-    ul.menu
-      li
+    ul.nav.nav-pills.nav-justified
+      li(role='presentation')
         a(href='CR2HP1') CR2-HP1
-      li
+      li(role='presentation')
         a(href='CR2HP2') CR2-HP2
-      li
+      li(role='presentation')
         a(href='CR2HP3') CR2-HP3
-      li
+      li(role='presentation')
         a(href='CR3HP1') CR3-HP1
-      li
+      li(role='presentation')
         a(href='CR3HP2') CR3-HP2
-      li
+      li(role='presentation')
         a(href='CR3HP3') CR3-HP3
-      li
+      li(role='presentation')
         a(href='CR3HP4') CR3-HP4
-      li
+      li(role='presentation')
         a(href='building') GES Building
-
+    hr
     div(ng-view)
 
     div

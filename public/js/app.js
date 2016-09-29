@@ -38,6 +38,10 @@ config(function ($routeProvider, $locationProvider) {
       templateUrl: 'partials/CR3HP4',
       controller: 'CR3HP4'
     }).
+    when('/building', {
+      templateUrl: 'partials/building',
+      controller: 'building'
+    }).
     otherwise({
       redirectTo: '/CR3HP2'
     });

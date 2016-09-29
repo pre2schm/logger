@@ -9,6 +9,7 @@ var CR3HP1 = '10.1.0.138';
 var CR3HP2 = '10.1.0.118';
 var CR3HP3 = '10.1.0.211';
 var CR3HP4 = '10.1.0.214';
+var Building = '10.1.0.151';
 
 var CR2HP1data;
 var CR2HP2data;
@@ -17,6 +18,7 @@ var CR3HP1data;
 var CR3HP2data;
 var CR3HP3data;
 var CR3HP4data;
+var buildingData;
 
 function findAnalog(a,b){
 	return a.PCOWEB.PCO[0].ANALOG[0].VARIABLE[b].VALUE[0];
@@ -137,6 +139,7 @@ CR3HP1data = webboardData(CR3HP1);
 CR3HP2data = webboardData(CR3HP2);
 CR3HP3data = webboardData(CR3HP3);
 CR3HP4data = webboardData(CR3HP4);
+buildingData = webboardData(Building);
 
 exports.CR2HP1 = function (req, res) {
   res.json(CR2HP1data);
@@ -166,3 +169,6 @@ exports.CR3HP4 = function (req, res) {
   res.json(CR3HP4data);
 };
 
+exports.building = function (req, res) {
+  res.json(buildingData);
+};

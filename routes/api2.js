@@ -40,7 +40,8 @@ function webboardData(a){
 					integer: [[1],[2]],
 					defrostElapse: [],
 					runDuration: [],
-					defrostLength: []
+					defrostLength: [],
+					dataTime:[]
 					};
 	var analog =[];
 	var digital =[];
@@ -52,6 +53,7 @@ function webboardData(a){
 	var appState;
 	var defrostStart = 0;
 	var defrostEnd =0;
+	var dataTime = 0;
 
 	function analogRounder(index,scale){
         var dataRound;
@@ -118,7 +120,7 @@ function webboardData(a){
 					dataNew.defrostLength = defrostEnd - defrostStart;
 				}
 
-
+				dataNew.dataTime = (new Date).getTime();
            
         });
        }else{

@@ -18,6 +18,10 @@ body
                 {{state}}
               p.bg-success(ng-show= "var")
                 {{state}}
+            tr 
+              td(ng-show= "var")  
+                button.btn.btn-success.btn-sm(type='button', ng-click='clickOnFunction()') ON
+                button.btn.btn-danger.btn-sm(type='button', ng-click='clickOffFunction()') OFF
         .col-md-3
           table.table
             tr

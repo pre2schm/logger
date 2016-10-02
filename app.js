@@ -62,6 +62,9 @@ app.get('/api2/CR3HP3', api2.CR3HP3);
 app.get('/api2/CR3HP4', api2.CR3HP4);
 app.get('/api2/Building', api2.building);
 
+app.post('/api2/unitOn', api2.unitOn);
+app.post('/api2/unitOff', api2.unitOff);
+
 // redirect all others to the index (HTML5 history)
 app.get('*', routes.index);
 

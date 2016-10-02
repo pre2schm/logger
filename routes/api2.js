@@ -54,6 +54,7 @@ function webboardData(a){
 	var defrostStart = 0;
 	var defrostEnd =0;
 	var dataTime = 0;
+	var defrostStart1 = 0
 
 	function analogRounder(index,scale){
         var dataRound;
@@ -111,9 +112,10 @@ function webboardData(a){
 				}
 
 				if(appState === 0.4){
-					defrostStart = (new Date).getTime();
+					defrostStart1 = (new Date).getTime();
 				} else if(appState === 0.8){
 					defrostEnd = (new Date).getTime();
+					defrostStart = defrostStart1;
 				} else if ( appState === 0.6){
 
 				} else {
@@ -142,6 +144,50 @@ CR3HP2data = webboardData(CR3HP2);
 CR3HP3data = webboardData(CR3HP3);
 CR3HP4data = webboardData(CR3HP4);
 buildingData = webboardData(Building);
+
+
+// var dataArray = [
+// 				'CR2HP1data',
+// 				'CR2HP2data',
+// 				'CR2HP3data',
+// 				'CR3HP1data',
+// 				'CR3HP2data',
+// 				'CR3HP3data',
+// 				'CR3HP4data',
+// 				'buildingData'
+// 				];
+// var sumData =[];
+
+// function summaryData(dataArray2){
+	
+// 			for (i = 0; i < dataArray2.length; i++) { 
+// 				var thing = this[dataArray2[i]];
+
+// 				if(dataArray2[i]>10){
+// 					var data = digitalRounder(dataArray2[i].device, 53);
+// 		    		sumData.push = {device : data};
+// 					}
+// 				};
+// return sumData;
+// }
+				
+
+	// function digitalRounder(device,index){
+	//         var dataRound;
+	//         dataRound = Math.round(((device.digital[0][index-1]))*1)/1;
+	//         return dataRound;
+	//       };
+
+// setInterval(function(){
+// 	sumData =[];
+// 	for (i=0; i < dataArray.length; i++){
+// 		console.log(dataArray[i].device + ' : ' + digitalRounder(dataArray[i].device, 53));
+// 	}
+	
+// 	//console.log("digital:" + summaryData(dataArray));
+// },10000);
+
+
 
 exports.CR2HP1 = function (req, res) {
   res.json(CR2HP1data);
@@ -174,3 +220,76 @@ exports.CR3HP4 = function (req, res) {
 exports.building = function (req, res) {
   res.json(buildingData);
 };
+
+module.exports.unitOn = function(req, res) {
+  console.log(req.body);
+  var device = req.body.device;
+  var ip;
+
+  if (device === 'CR2HP1'){
+  	call(CR2HP1);
+  } else if (device ==='CR2HP2'){
+  	call(CR2HP2);
+  } else if (device ==='CR2HP3'){
+  	call(CR2HP3);
+  } else if (device ==='CR3HP1'){
+  	call(CR3HP1);
+  } else if (device ==='CR3HP2'){
+  	call(CR3HP2);
+  } else if (device ==='CR3HP3'){
+  	call(CR3HP3);
+  } else if (device ==='CR3HP4'){
+  	call(CR3HP4);
+  } else if (device ==='Building'){
+  	call(Building);
+  }
+
+  console.log(device);
+
+  function call(ip) {
+  	request('http://admin:fadmin@'+ ip + '/config/query.cgi?var|D|53|1|', function (error, response, body){
+  	if (!error && response.statusCode == 200) {
+    console.log('sent') 
+  			}else{
+  				console.log(error);
+  			}
+		})
+	}
+}
+
+  module.exports.unitOff = function(req, res) {
+  console.log(req.body);
+  var device = req.body.device;
+  var ip;
+
+  if (device === 'CR2HP1'){
+  	call(CR2HP1);
+  } else if (device ==='CR2HP2'){
+  	call(CR2HP2);
+  } else if (device ==='CR2HP3'){
+  	call(CR2HP3);
+  } else if (device ==='CR3HP1'){
+  	call(CR3HP1);
+  } else if (device ==='CR3HP2'){
+  	call(CR3HP2);
+  } else if (device ==='CR3HP3'){
+  	call(CR3HP3);
+  } else if (device ==='CR3HP4'){
+  	call(CR3HP4);
+  } else if (device ==='Building'){
+  	call(Building);
+  }
+
+  console.log(device);
+
+  function call(ip) {
+  	request('http://admin:fadmin@'+ ip + '/config/query.cgi?var|D|53|0|', function (error, response, body){
+  	if (!error && response.statusCode == 200) {
+    console.log('sent') 
+  			}else{
+  				console.log(error);
+  			}
+		})
+	}
+  }
+

@@ -22,6 +22,26 @@ angular.module('myApp.controllers', []).
   controller('templateCtrl', function ($scope,$http, $timeout, $routeParams) {
     // write Ctrl here
 
+    $scope.clickOn = 0;
+    $scope.clickOnFunction = function(){
+      $scope.clickOn++;
+      $http({
+        method: 'POST',
+        url: '/api2/unitOn',
+        data: { device: $scope.num }
+      })
+    }
+
+    $scope.clickOff = 0;
+    $scope.clickOffFunction = function(){
+      $scope.clickOff++;
+      $http({
+        method: 'POST',
+        url: '/api2/unitOff',
+        data: { device: $scope.num }
+      })
+    }
+
     $scope.num = $routeParams.num;
     $scope.intervalFunction = function(){
       $timeout(function() {
@@ -65,6 +85,16 @@ angular.module('myApp.controllers', []).
         $scope.defrostElapse = Math.round(data.defrostElapse/60000*1)/1;
         $scope.defrostDuration = Math.round(data.defrostLength/60000*1)/1;
         
+        if ($scope.runTime > 1440){
+          var days = Math.floor($scope.runTime/1440);
+          var hours = Math.floor(($scope.runTime - (days * 1440))/60);
+          var mins = $scope.runTime - (hours * 60) - (days * 1440);
+          $scope.runTime = days + ' days' + hours + ' hours' + mins;
+        } else if ($scope.runTime > 60){
+          var hours = Math.floor($scope.runTime/60);
+          var mins = $scope.runTime - (hours * 60);
+          $scope.runTime = hours + ' hours' + mins;
+        }
         
         $scope.timediff = (new Date).getTime() - data.dataTime;
         if($scope.timediff > 60000){
@@ -131,7 +161,49 @@ angular.module('myApp.controllers', []).
 
   }).
 
-  controller('summary', function ($scope) {
+  controller('summary', function ($scope, $http) {
     // write Ctrl here
+    $scope.devices = [
+      {device: 'CR2HP1', status: "Unknown"},
+      {device: 'CR2HP2', status: "Unknown"},
+      {device: 'CR2HP3', status: "Unknown"},
+      {device: 'CR3HP1', status: "Unknown"},
+      {device: 'CR3HP2', status: "Unknown"},
+      {device: 'CR3HP3', status: "Unknown"},
+      {device: 'CR3HP4', status: "Unknown"},
+      {device: 'Building', status: "Unknown"}
 
-  });
+    ];
+
+
+      function analogRounder(index,scale){
+        var dataRound;
+        dataRound = Math.round(((data.analog[0][index-1])*scale)*10)/10;
+        return dataRound;
+      };
+
+        $scope.data = function(){
+          $http({
+            method: 'GET',
+            url: '/api2/' + $scope.device
+          }).
+        success(function (data, status, headers, config) {
+           $scope.timediff = (new Date).getTime() - data.dataTime;
+        
+        if($scope.timediff > 60000){
+          $scope.state = "Not Connected";
+          $scope.var = 0;
+        } else {
+          $scope.state = "Connected";
+          $scope.var = 1;
+        }
+
+      }).
+        error(function (data, status, headers, config) {
+          $scope.name = 'Error!';
+      });
+
+      };
+      
+
+});

@@ -6,9 +6,11 @@
 angular.module('myApp.controllers', []).
   controller('AppCtrl', function ($scope, $http) {
 
+
+
     // $http({
     //   method: 'GET',
-    //   url: '/api/name'
+    //   url: '/api/summary'
     // }).
     // success(function (data, status, headers, config) {
     //   $scope.name = data.name;
@@ -19,7 +21,7 @@ angular.module('myApp.controllers', []).
     // });
 
   }).
-  controller('templateCtrl', function ($scope,$http, $timeout, $routeParams) {
+  controller('templateCtrl', function ($scope, $http, $timeout, $routeParams) {
     // write Ctrl here
 
     $scope.clickOn = 0;
@@ -89,11 +91,13 @@ angular.module('myApp.controllers', []).
           var days = Math.floor($scope.runTime/1440);
           var hours = Math.floor(($scope.runTime - (days * 1440))/60);
           var mins = $scope.runTime - (hours * 60) - (days * 1440);
-          $scope.runTime = days + ' days' + hours + ' hours' + mins;
+          days
+          
+          $scope.runTime = days + 'days ' + hours + ' hours ' + mins;
         } else if ($scope.runTime > 60){
           var hours = Math.floor($scope.runTime/60);
           var mins = $scope.runTime - (hours * 60);
-          $scope.runTime = hours + ' hours' + mins;
+          $scope.runTime = hours + ' hours ' + mins;
         }
         
         $scope.timediff = (new Date).getTime() - data.dataTime;
@@ -159,51 +163,63 @@ angular.module('myApp.controllers', []).
       $scope.data(); 
       $scope.intervalFunction();
 
+
+
   }).
 
-  controller('summary', function ($scope, $http) {
+  controller('summary', function ($scope, $http, $timeout) {
     // write Ctrl here
-    $scope.devices = [
-      {device: 'CR2HP1', status: "Unknown"},
-      {device: 'CR2HP2', status: "Unknown"},
-      {device: 'CR2HP3', status: "Unknown"},
-      {device: 'CR3HP1', status: "Unknown"},
-      {device: 'CR3HP2', status: "Unknown"},
-      {device: 'CR3HP3', status: "Unknown"},
-      {device: 'CR3HP4', status: "Unknown"},
-      {device: 'Building', status: "Unknown"}
+   
+$scope.goGet = function(){
 
-    ];
-
-
-      function analogRounder(index,scale){
-        var dataRound;
-        dataRound = Math.round(((data.analog[0][index-1])*scale)*10)/10;
-        return dataRound;
-      };
-
-        $scope.data = function(){
-          $http({
-            method: 'GET',
-            url: '/api2/' + $scope.device
-          }).
-        success(function (data, status, headers, config) {
-           $scope.timediff = (new Date).getTime() - data.dataTime;
-        
-        if($scope.timediff > 60000){
-          $scope.state = "Not Connected";
-          $scope.var = 0;
-        } else {
-          $scope.state = "Connected";
-          $scope.var = 1;
-        }
-
+  $http({
+        method: 'GET',
+        url: '/api2/summary'
       }).
-        error(function (data, status, headers, config) {
-          $scope.name = 'Error!';
-      });
+      success(function (data2, status, headers, config) {
+      $scope.devices2 = [
+        {device: 'CR2HP1', status: "", flow : ''},
+        {device: 'CR2HP2', status: "", flow : ''},
+        {device: 'CR2HP3', status: "", flow : ''},
+        {device: 'CR3HP1', status: "", flow : ''},
+        {device: 'CR3HP2', status: "", flow : ''},
+        {device: 'CR3HP3', status: "", flow : ''},
+        {device: 'CR3HP4', status: "", flow : ''},
+        {device: 'Building', status: "", flow : ''}
 
-      };
-      
+      ]; 
+          
+        $scope.lengthy = $scope.devices2.length 
+        
+        //Loop through devices in Array
+        for (var i = 0; i < $scope.lengthy; i++) { 
+            $scope.devices2[i].flow = data2.flow[i];
+            //Status Display
+             if(data2.status[i] === 1){
+              $scope.devices2[i].status = 'ON';
+             }else if(data2.status[i] === 0){
+              $scope.devices2[i].status = 'OFF';
+             }else{
+              $scope.devices2[i].status = '-';
+             }
+          };
+        }).
+    error(function (data, status, headers, config) {
+      $scope.name = 'Error!';
+    });
+}
+
+
+
+$scope.getter = function(){
+  $timeout(function() {
+    $scope.goGet();
+    $scope.getter();
+  
+  }, 10000);
+}
+
+$scope.goGet();
+$scope.getter();
 
 });

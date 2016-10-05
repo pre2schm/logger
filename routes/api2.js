@@ -11,14 +11,14 @@ var CR3HP3 = '10.1.0.211';
 var CR3HP4 = '10.1.0.214';
 var Building = '10.1.0.151';
 
-var CR2HP1data;
-var CR2HP2data;
-var CR2HP3data;
-var CR3HP1data;
-var CR3HP2data;
-var CR3HP3data;
-var CR3HP4data;
-var buildingData;
+var CR2HP1data = 0;
+var CR2HP2data = 0;
+var CR2HP3data = 0;
+var CR3HP1data = 0;
+var CR3HP2data = 0;
+var CR3HP3data = 0;
+var CR3HP4data = 0;
+var buildingData = 0;
 
 function findAnalog(a,b){
 	return a.PCOWEB.PCO[0].ANALOG[0].VARIABLE[b].VALUE[0];
@@ -35,7 +35,7 @@ function findInteger(a,b){
 function webboardData(a){
 
 	var data = 'loading...';
-	var dataNew ={ 	analog: [[1],[2]],
+	var dataNew ={ 	analog: [['1','2'],['11','12']],
 					digital: [[1],[2]],
 					integer: [[1],[2]],
 					defrostElapse: [],
@@ -146,48 +146,73 @@ CR3HP4data = webboardData(CR3HP4);
 buildingData = webboardData(Building);
 
 
-// var dataArray = [
-// 				'CR2HP1data',
-// 				'CR2HP2data',
-// 				'CR2HP3data',
-// 				'CR3HP1data',
-// 				'CR3HP2data',
-// 				'CR3HP3data',
-// 				'CR3HP4data',
-// 				'buildingData'
-// 				];
-// var sumData =[];
+var dataArray = [
+				CR2HP1data,
+				CR2HP2data,
+				CR2HP3data,
+				CR3HP1data,
+				CR3HP2data,
+				CR3HP3data,
+				CR3HP4data,
+				buildingData
+				];
+var sumData =[];
+
+function digitalRounder(device,index){
+	        var dataRound;
+	        dataRound = Math.round(((device.digital[0][index-1]))*1)/1;
+	        return dataRound;
+	      };
+function analogRounder2(device,index,scale){
+        var dataRound;
+        dataRound = Math.round(((device.analog[0][index-1])*scale)*10)/10;
+        return dataRound;
+      };
+
 
 // function summaryData(dataArray2){
-	
+// 	console.log(dataArray2.length);
 // 			for (i = 0; i < dataArray2.length; i++) { 
-// 				var thing = this[dataArray2[i]];
+// 				if(dataArray2[i].digital[0].length > 3){
+// 					console.log('success : ' + dataArray2[i]);
+// 					var data = digitalRounder(dataArray2[i],53);
+// 					sumData.push = data;
+// 				} else {
+// 					console.log('no data : ' + dataArray2[i]);
+// 					sumData.push = 0;
+// 				}
+// 			} 
+// 		return sumData;
+// 	};
 
-// 				if(dataArray2[i]>10){
-// 					var data = digitalRounder(dataArray2[i].device, 53);
-// 		    		sumData.push = {device : data};
-// 					}
-// 				};
-// return sumData;
-// }
-				
 
-	// function digitalRounder(device,index){
-	//         var dataRound;
-	//         dataRound = Math.round(((device.digital[0][index-1]))*1)/1;
-	//         return dataRound;
-	//       };
+setInterval(function(){
+	//console.log(dataArray[1].digital[0][53]);
+	sumData = {'status' : [] ,
+		'flow' : [] };
+	for (i = 0; i < dataArray.length; i++) { 
 
-// setInterval(function(){
-// 	sumData =[];
-// 	for (i=0; i < dataArray.length; i++){
-// 		console.log(dataArray[i].device + ' : ' + digitalRounder(dataArray[i].device, 53));
-// 	}
+		//console.log(i + 'a : ' + dataArray[i].analog[0].length);	
 	
-// 	//console.log("digital:" + summaryData(dataArray));
-// },10000);
+		if(dataArray[i].analog[0].length > 3) {
+		
+		//console.log(i + ' : ' + dataArray[i].digital[0][52]);
+		//sumData.push(dataArray[i].digital[0][52]);
+		sumData.status.push(digitalRounder(dataArray[i],53));
+		sumData.flow.push(analogRounder2(dataArray[i],47,1));
 
+		} else {
+		sumData.status.push('-');	
+		sumData.flow.push('-');	
+		}
+		
+	}
+	console.log(sumData);
+},10000);
 
+exports.summary = function (req, res) {
+  res.json(sumData);
+};
 
 exports.CR2HP1 = function (req, res) {
   res.json(CR2HP1data);

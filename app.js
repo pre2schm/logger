@@ -61,6 +61,7 @@ app.get('/api2/CR3HP2', api2.CR3HP2);
 app.get('/api2/CR3HP3', api2.CR3HP3);
 app.get('/api2/CR3HP4', api2.CR3HP4);
 app.get('/api2/Building', api2.building);
+app.get('/api2/summary', api2.summary);
 
 app.post('/api2/unitOn', api2.unitOn);
 app.post('/api2/unitOff', api2.unitOff);

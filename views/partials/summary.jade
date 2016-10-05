@@ -6,12 +6,23 @@ link(rel='stylesheet', href='https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css
       }
 body
 .row
+  .col-md-12
+    h1 GES Climate Room Summary
+.row
   div(ng-controller='summary')
-    .col-md-3
+    .col-md-4
+    .col-md-4
       table.table
         tr
-          th Device
-          th Status
-        tr(ng-repeat='x in devices | orderBy:myOrderBy')
+          th
+            center Device
+          th 
+            center Status
+          th
+            center Flow
+        tr(ng-repeat='x in devices2 | orderBy:myOrderBy')
           td {{x.device}}
           td {{x.status}}
+          td {{x.flow}}
+    .col-md-4
+    

@@ -177,23 +177,40 @@ $scope.goGet = function(){
         url: '/api2/summary'
       }).
       success(function (data2, status, headers, config) {
+      
       $scope.devices2 = [
-        {device: 'CR2HP1', status: "", flow : ''},
-        {device: 'CR2HP2', status: "", flow : ''},
-        {device: 'CR2HP3', status: "", flow : ''},
-        {device: 'CR3HP1', status: "", flow : ''},
-        {device: 'CR3HP2', status: "", flow : ''},
-        {device: 'CR3HP3', status: "", flow : ''},
-        {device: 'CR3HP4', status: "", flow : ''},
-        {device: 'Building', status: "", flow : ''}
+
+        {device: 'CR2HP1', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : ''},
+        {device: 'CR2HP2', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : ''},
+        {device: 'CR2HP3', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : ''},
+        {device: 'CR3HP1', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : ''},
+        {device: 'CR3HP2', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : ''},
+        {device: 'CR3HP3', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : ''},
+        {device: 'CR3HP4', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : ''},
+        {device: 'Building', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : ''},
 
       ]; 
           
+
         $scope.lengthy = $scope.devices2.length 
         
         //Loop through devices in Array
         for (var i = 0; i < $scope.lengthy; i++) { 
             $scope.devices2[i].flow = data2.flow[i];
+            $scope.devices2[i].return = data2.return[i];
+            $scope.devices2[i].compSpeed = data2.compSpeed[i];
+            $scope.devices2[i].defrostTime = data2.defrostTime[i];
+            $scope.currentTime = (new Date).getTime()
+
+            if($scope.currentTime - data2.time[i] > 60000){
+              $scope.devices2[i].connected = '-';
+              $scope.devices2[i].var2 = 0;
+            } else {
+              $scope.devices2[i].connected ='Connected';
+              $scope.devices2[i].var2 = 1;
+            }
+
+
             //Status Display
              if(data2.status[i] === 1){
               $scope.devices2[i].status = 'ON';
@@ -202,6 +219,13 @@ $scope.goGet = function(){
              }else{
               $scope.devices2[i].status = '-';
              }
+
+            $scope.stateArray = ['OFF', 'Cooling', 'Heating', 'Alarm', 'Transition to Defrost', 'Defrost', 'Waiting', 'Standby', 'Transition to Heating', 'Stopping', 'Manual'];
+            //stateNumber = data2.state[i];
+            $scope.devices2[i].state = $scope.stateArray[data2.state[i]];
+
+            
+
           };
         }).
     error(function (data, status, headers, config) {

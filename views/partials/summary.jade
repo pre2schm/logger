@@ -16,13 +16,29 @@ body
         tr
           th
             center Device
+          th
+            center Connected
           th 
             center Status
           th
-            center Flow
-        tr(ng-repeat='x in devices2 | orderBy:myOrderBy')
-          td {{x.device}}
+            center State
+          th
+            center Flow Temp
+          th
+            center Return Temp
+          th
+            center Comp Speed
+          th
+            center Defrost Time
+        tr(ng-repeat='x in devices2 | orderBy:myOrderBy') 
+          td
+            a(href='ashp/{{x.device}}') {{x.device}}
+          td {{x.connected}}
           td {{x.status}}
+          td {{x.state}}
           td {{x.flow}}
+          td {{x.return}}
+          td {{x.compSpeed}}
+          td {{x.defrostTime}}
     .col-md-4
     

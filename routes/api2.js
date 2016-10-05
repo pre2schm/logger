@@ -189,7 +189,13 @@ function analogRounder2(device,index,scale){
 setInterval(function(){
 	//console.log(dataArray[1].digital[0][53]);
 	sumData = {'status' : [] ,
-		'flow' : [] };
+				'flow' : [] ,
+				'return' : [],
+				'time' : [],
+				'state' : [],
+				'defrostTime' : [],
+				'compSpeed' : [] };
+
 	for (i = 0; i < dataArray.length; i++) { 
 
 		//console.log(i + 'a : ' + dataArray[i].analog[0].length);	
@@ -200,10 +206,21 @@ setInterval(function(){
 		//sumData.push(dataArray[i].digital[0][52]);
 		sumData.status.push(digitalRounder(dataArray[i],53));
 		sumData.flow.push(analogRounder2(dataArray[i],47,1));
+		sumData.return.push(analogRounder2(dataArray[i],2,1));
+		sumData.state.push(analogRounder2(dataArray[i],133,10));
+		sumData.compSpeed.push(analogRounder2(dataArray[i],176,10));
+		sumData.time.push(dataArray[i].dataTime);
+		sumData.defrostTime.push(dataArray[i].defrostLength);
+
 
 		} else {
 		sumData.status.push('-');	
 		sumData.flow.push('-');	
+		sumData.return.push('-');
+		sumData.state.push(0);
+		sumData.compSpeed.push('-');	
+		sumData.time.push('0');		
+		sumData.defrostTime.push('-');		
 		}
 		
 	}

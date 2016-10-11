@@ -1,0 +1,40 @@
+link(rel='stylesheet', href='https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css')
+    style.
+      html, body
+      {
+      font-size: 1.1em;
+      }
+body
+.row
+  .col-md-12
+    h1 GES Climate Room Summary
+.row
+  div(ng-controller='settings')
+    center
+      table.table
+        tr
+          th
+            center Device Name
+          th
+            center IP Address
+          th 
+            center 
+        tr(ng-repeat='x in deviceSettings | orderBy:myOrderBy') 
+          td
+            center 
+              a(href='ashp/{{x.deviceName}}') {{x.deviceName}}
+          td
+            center {{x.deviceIP}}
+          td 
+            button.btn.btn-danger.btn-sm(type='button', ng-click='removeDevice($index)') DELETE
+        tr
+          td
+            center
+              input(ng-model="deviceName1", style='width: 100px;')
+          td
+            center
+              input(ng-model="deviceIP1", style='width: 100px;')
+          td
+            button.btn.btn-success.btn-sm(type='button', ng-click='addDevice()') ADD
+          
+         

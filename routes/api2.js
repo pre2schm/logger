@@ -1,7 +1,36 @@
-
+// Imports
 var parseString = require('xml2js').parseString;
 var request = require('request');
 
+var devices = [];
+var dataStore = [];
+
+
+function pushDevice(name,ipAddress) {
+	var newDevice = {name : name,
+					ipAddress : ipAddress};
+	devices.push = newDevice;
+}
+
+function createDataVar(name, data) {
+	var newData = {name : name,
+					data: data};
+	dataStore.push = newData;
+
+}
+
+var deviceArray =[	{ deviceName : 'CR2HP1' , deviceIP : '10.1.0.171' },
+					{ deviceName : 'CR2HP2' , deviceIP : '10.1.0.122' },
+					{ deviceName : 'CR2HP3' , deviceIP : '10.1.0.131' },
+					{ deviceName : 'CR3HP1' , deviceIP : '10.1.0.138' },
+					{ deviceName : 'CR3HP2' , deviceIP : '10.1.0.118' },
+					{ deviceName : 'CR3HP3' , deviceIP : '10.1.0.211' },
+					{ deviceName : 'CR3HP4' , deviceIP : '10.1.0.214' },
+					{ deviceName : 'Building' , deviceIP : '10.1.0.151' },
+
+];
+
+// Device Ip Addresses
 var CR2HP1 = '10.1.0.171';
 var CR2HP2 = '10.1.0.122';
 var CR2HP3 = '10.1.0.131';
@@ -11,6 +40,7 @@ var CR3HP3 = '10.1.0.211';
 var CR3HP4 = '10.1.0.214';
 var Building = '10.1.0.151';
 
+// Variables to push data to
 var CR2HP1data = 0;
 var CR2HP2data = 0;
 var CR2HP3data = 0;
@@ -20,14 +50,17 @@ var CR3HP3data = 0;
 var CR3HP4data = 0;
 var buildingData = 0;
 
+// Return analog variable from webboard data, a= data set, b= BMS No.
 function findAnalog(a,b){
 	return a.PCOWEB.PCO[0].ANALOG[0].VARIABLE[b].VALUE[0];
 };
 
+// Return digital variable from webboard data, a= data set, b= BMS No.
 function findDigital(a,b){
 	return a.PCOWEB.PCO[0].DIGITAL[0].VARIABLE[b].VALUE[0];
 };
 
+// Return integer variable from webboard data, a= data set, b= BMS No.
 function findInteger(a,b){
 	return a.PCOWEB.PCO[0].INTEGER[0].VARIABLE[b].VALUE[0];
 };
@@ -56,6 +89,7 @@ function webboardData(a){
 	var dataTime = 0;
 	var defrostStart1 = 0
 
+// return analog BMS variable from dataNew and scale
 	function analogRounder(index,scale){
         var dataRound;
         dataRound = Math.round(((dataNew.analog[0][index-1])*scale)*10)/10;
@@ -194,7 +228,9 @@ setInterval(function(){
 				'time' : [],
 				'state' : [],
 				'defrostTime' : [],
-				'compSpeed' : [] };
+				'compSpeed' : [],
+				'evapTemp' : [],
+				'ambient' : [] };
 
 	for (i = 0; i < dataArray.length; i++) { 
 
@@ -211,7 +247,8 @@ setInterval(function(){
 		sumData.compSpeed.push(analogRounder2(dataArray[i],176,10));
 		sumData.time.push(dataArray[i].dataTime);
 		sumData.defrostTime.push(dataArray[i].defrostLength);
-
+		sumData.evapTemp.push(analogRounder2(dataArray[i],118,0.1));
+		sumData.ambient.push(analogRounder2(dataArray[i],173,0.1));
 
 		} else {
 		sumData.status.push('-');	
@@ -220,7 +257,9 @@ setInterval(function(){
 		sumData.state.push(0);
 		sumData.compSpeed.push('-');	
 		sumData.time.push('0');		
-		sumData.defrostTime.push('-');		
+		sumData.defrostTime.push('-');
+		sumData.evapTemp.push('-');
+		sumData.ambient.push('-');		
 		}
 		
 	}
@@ -261,6 +300,15 @@ exports.CR3HP4 = function (req, res) {
 
 exports.building = function (req, res) {
   res.json(buildingData);
+};
+
+exports.settings = function (req, res) {
+  res.json(deviceArray);
+};
+
+exports.settingsPOST = function (req, res) {
+  console.log(req.body);
+  deviceArray = req.body;
 };
 
 module.exports.unitOn = function(req, res) {
@@ -335,3 +383,14 @@ module.exports.unitOn = function(req, res) {
 	}
   }
 
+module.exports.buildNo = function(req, res) {
+ // console.log(req.body)
+
+var buildNo = [];
+  for (i = 0; i < req.body.length; i++) { 
+  	buildNo.push(req.body[i].id);
+  	console.log(buildNo);
+  }
+
+
+}

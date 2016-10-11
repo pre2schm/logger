@@ -10,12 +10,10 @@ body
     h1 GES Climate Room Summary
 .row
   div(ng-controller='summary')
-    .col-md-4
-    .col-md-4
+    center
       table.table
         tr
-          th
-            center Device
+          th Device
           th
             center Connected
           th 
@@ -23,22 +21,43 @@ body
           th
             center State
           th
+            center Return Temp
+          th
             center Flow Temp
           th
-            center Return Temp
+            center Ambient
           th
             center Comp Speed
           th
             center Defrost Time
+          th
+            center Evap Temp
+          th
+            Build No. 
+            button.btn.btn-success.btn-sm(type='button', ng-click='postBuildNo()') UPDATE
         tr(ng-repeat='x in devices2 | orderBy:myOrderBy') 
           td
             a(href='ashp/{{x.device}}') {{x.device}}
-          td {{x.connected}}
-          td {{x.status}}
-          td {{x.state}}
-          td {{x.flow}}
-          td {{x.return}}
-          td {{x.compSpeed}}
-          td {{x.defrostTime}}
-    .col-md-4
+          td
+            center {{x.connected}}
+          td 
+            center {{x.status}}
+          td 
+            center {{x.state}}
+          td 
+            center {{x.return}}
+          td 
+            center {{x.flow}}
+          td 
+            center {{x.ambient}}
+          td 
+            center {{x.compSpeed}}
+          td 
+            center {{x.defrostTime}}
+          td 
+            center {{x.evapTemp}}
+          td 
+            center 
+            input(ng-model="x.id", ng-change="postBuildNo", style='width: 60px;')
+    
     

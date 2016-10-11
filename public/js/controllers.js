@@ -169,7 +169,19 @@ angular.module('myApp.controllers', []).
 
   controller('summary', function ($scope, $http, $timeout) {
     // write Ctrl here
-   
+ $scope.devices2 = [
+
+        {device: 'CR2HP1', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : '', id : '', evapTemp : '', ambient : ''},
+        {device: 'CR2HP2', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : '', id : '', evapTemp : '', ambient : ''},
+        {device: 'CR2HP3', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : '', id : '', evapTemp : '', ambient : ''},
+        {device: 'CR3HP1', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : '', id : '', evapTemp : '', ambient : ''},
+        {device: 'CR3HP2', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : '', id : '', evapTemp : '', ambient : ''},
+        {device: 'CR3HP3', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : '', id : '', evapTemp : '', ambient : ''},
+        {device: 'CR3HP4', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : '', id : '', evapTemp : '', ambient : ''},
+        {device: 'Building', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : '', id : '', evapTemp : '', ambient : ''},
+
+      ];  
+
 $scope.goGet = function(){
 
   $http({
@@ -178,18 +190,7 @@ $scope.goGet = function(){
       }).
       success(function (data2, status, headers, config) {
       
-      $scope.devices2 = [
-
-        {device: 'CR2HP1', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : ''},
-        {device: 'CR2HP2', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : ''},
-        {device: 'CR2HP3', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : ''},
-        {device: 'CR3HP1', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : ''},
-        {device: 'CR3HP2', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : ''},
-        {device: 'CR3HP3', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : ''},
-        {device: 'CR3HP4', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : ''},
-        {device: 'Building', status: '', flow : '', return : '', state : '', compSpeed : '', defrostTime : '', connected : '', var2 : ''},
-
-      ]; 
+      
           
 
         $scope.lengthy = $scope.devices2.length 
@@ -199,7 +200,9 @@ $scope.goGet = function(){
             $scope.devices2[i].flow = data2.flow[i];
             $scope.devices2[i].return = data2.return[i];
             $scope.devices2[i].compSpeed = data2.compSpeed[i];
-            $scope.devices2[i].defrostTime = data2.defrostTime[i];
+            $scope.devices2[i].defrostTime = Math.round(data2.defrostTime[i]/60000)/1;
+            $scope.devices2[i].evapTemp = data2.evapTemp[i];
+            $scope.devices2[i].ambient = data2.ambient[i];
             $scope.currentTime = (new Date).getTime()
 
             if($scope.currentTime - data2.time[i] > 60000){
@@ -246,4 +249,56 @@ $scope.getter = function(){
 $scope.goGet();
 $scope.getter();
 
-});
+$scope.postBuildNo = function(){
+      $http({
+        method: 'POST',
+        url: '/api2/buildNo',
+        data: $scope.devices2
+      })
+    }
+
+}).
+  controller('settings', function ($scope, $http) {
+  
+  $scope.deviceSettings = [];
+  $scope.deviceName1;
+  $scope.deviceIP1;
+
+  $scope.getDeviceSettings = function (){
+    $http({
+      method: 'GET',
+      url: '/api2/settings'
+    }).
+    success(function (data3, status, headers, config) {
+
+    $scope.deviceSettings = data3;
+
+    })
+  }
+
+  $scope.postDeviceSettings = function (){
+    $http({
+      method: 'POST',
+      url: '/api2/settingsPOST',
+      data: $scope.deviceSettings
+    })
+  }
+
+
+  $scope.addDevice = function() {
+   
+  $scope.deviceSettings.push({ deviceName : $scope.deviceName1 , deviceIP : $scope.deviceIP1});
+
+  $scope.deviceName1 = '';
+  $scope.deviceIP1 = '';
+  $scope.postDeviceSettings();
+  }
+
+  $scope.removeDevice = function(index) {
+    $scope.deviceSettings.splice(index,1);
+    $scope.postDeviceSettings();
+  }
+
+ $scope.getDeviceSettings();
+
+  });

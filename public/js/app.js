@@ -18,6 +18,10 @@ config(function ($routeProvider, $locationProvider) {
       templateUrl: 'partials/template',
       controller: 'templateCtrl'
     }).
+    when('/settings', {
+      templateUrl: 'partials/settings',
+      controller: 'settings'
+    }).
     otherwise({
       redirectTo: '/summary'
     });

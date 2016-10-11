@@ -86,6 +86,9 @@ angular.module('myApp.controllers', []).
         $scope.runTime = Math.round(data.runDuration/60000*1)/1;
         $scope.defrostElapse = Math.round(data.defrostElapse/60000*1)/1;
         $scope.defrostDuration = Math.round(data.defrostLength/60000*1)/1;
+        $scope.condenserPlateTemp = analogRounder(254,0.1);
+        $scope.condenserInterfaceTemp = analogRounder(252,1);
+        $scope.interfaceAlarm = data.digital[0][178];
         
         if ($scope.runTime > 1440){
           var days = Math.floor($scope.runTime/1440);

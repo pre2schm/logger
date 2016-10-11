@@ -97,7 +97,7 @@ function webboardData(a){
       };
 
 	setInterval(function(){
-		request('http://admin:fadmin@'+ a + '/config/xml.cgi?A%7C1%7C200%7CD%7C1%7C200%7CI%7C1%7C200', {timeout: 1500}, function (error, response, body) {
+		request('http://admin:fadmin@'+ a + '/config/xml.cgi?A%7C1%7C300%7CD%7C1%7C300%7CI%7C1%7C300', {timeout: 1500}, function (error, response, body) {
         	if(!error){
 
         		parseString(body, function (err, result) {
@@ -113,7 +113,7 @@ function webboardData(a){
 	        		dataNew.integer.pop();
 	        	};
 
-	        	for (i = 0; i < 200; i++) { 
+	        	for (i = 0; i < 300; i++) { 
 	    		analog.push(findAnalog(result,i));
 	    		digital.push(findDigital(result,i));
 	    		integer.push(findInteger(result,i));

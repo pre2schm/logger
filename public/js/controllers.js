@@ -23,7 +23,8 @@ angular.module('myApp.controllers', []).
   }).
   controller('templateCtrl', function ($scope, $http, $timeout, $routeParams) {
     // write Ctrl here
-
+$scope.minInterfaceTemp = 100;
+          $scope.minPlateTemp = 100;
     $scope.clickOn = 0;
     $scope.clickOnFunction = function(){
       $scope.clickOn++;
@@ -142,14 +143,15 @@ angular.module('myApp.controllers', []).
           $scope.comp = "Cooling";
         } else if (compState === 2){
           $scope.comp = "Heating";
+          
+
         } else if (compState === 3){
           $scope.comp = "Alarm";
         } else if (compState === 4){
           $scope.comp = "Transition to Defrost";
         } else if (compState === 5){
           $scope.comp = "Defrost";
-          $scope.minInterfaceTemp = 100;
-          $scope.minPlateTemp = 100;
+          
           if($scope.condenserInterfaceTemp < $scope.minInterfaceTemp){
 
             $scope.minInterfaceTemp = $scope.condenserInterfaceTemp;

@@ -65,8 +65,18 @@ function findInteger(a,b){
 	return a.PCOWEB.PCO[0].INTEGER[0].VARIABLE[b].VALUE[0];
 };
 
+
+  
+
+// Get data from webboard and add to array
 function webboardData(a){
 
+	// return analog BMS variable from dataNew and scale
+	function analogRounder(index,scale){
+	    var dataRound;
+	    dataRound = Math.round(((dataNew.analog[0][index-1])*scale)*10)/10;
+	    return dataRound;
+	};
 	var data = 'loading...';
 	var dataNew ={ 	analog: [['1','2'],['11','12']],
 					digital: [[1],[2]],
@@ -89,17 +99,12 @@ function webboardData(a){
 	var dataTime = 0;
 	var defrostStart1 = 0
 
-// return analog BMS variable from dataNew and scale
-	function analogRounder(index,scale){
-        var dataRound;
-        dataRound = Math.round(((dataNew.analog[0][index-1])*scale)*10)/10;
-        return dataRound;
-      };
 
+// GET data from webboard
 	setInterval(function(){
 		request('http://admin:fadmin@'+ a + '/config/xml.cgi?A%7C1%7C300%7CD%7C1%7C300%7CI%7C1%7C300', {timeout: 1500}, function (error, response, body) {
         	if(!error){
-
+        		//parse XML to string
         		parseString(body, function (err, result) {
 
 	        	data = result;	        	
@@ -107,24 +112,29 @@ function webboardData(a){
 	        	digital = [];
 	        	integer =[];
 
+	        	// if data array has 10 items then remove the last item
 	        	if (dataNew.analog.length === 10){
 	        		dataNew.analog.pop();
 	        		dataNew.digital.pop();
 	        		dataNew.integer.pop();
 	        	};
 
+	        	// from results push data into a analog array
 	        	for (i = 0; i < 300; i++) { 
 	    		analog.push(findAnalog(result,i));
 	    		digital.push(findDigital(result,i));
 	    		integer.push(findInteger(result,i));
 				};
 
+				// add to front of data array 
 				dataNew.analog.unshift(analog);
 				dataNew.digital.unshift(digital);
 				dataNew.integer.unshift(integer);
 
+				// get application state
 				appState = analogRounder(133,1)
 				
+				// calculate defrost elapse time
 				if(appState === 0.5){
 					defrostTime = (new Date).getTime();
 					defrostElapse = 0;
@@ -135,6 +145,7 @@ function webboardData(a){
 					dataNew.defrostElapse = defrostElapse;
 				}
 
+				// calculate run duration
 				if(appState === 0){
 					offTime = (new Date).getTime();
 					runDuration = 0;
@@ -145,6 +156,8 @@ function webboardData(a){
 					dataNew.runDuration = runDuration;
 				}
 
+
+				// calculate length of defrost
 				if(appState === 0.4){
 					defrostStart1 = (new Date).getTime();
 				} else if(appState === 0.8){
@@ -156,15 +169,16 @@ function webboardData(a){
 					dataNew.defrostLength = defrostEnd - defrostStart;
 				}
 
+				// add timestamp to data
 				dataNew.dataTime = (new Date).getTime();
            
         });
+
        }else{
 
 			console.log(a + ':' + error);
        };
    	})
-		
 },10000);
 
  return dataNew;
@@ -203,21 +217,6 @@ function analogRounder2(device,index,scale){
         return dataRound;
       };
 
-
-// function summaryData(dataArray2){
-// 	console.log(dataArray2.length);
-// 			for (i = 0; i < dataArray2.length; i++) { 
-// 				if(dataArray2[i].digital[0].length > 3){
-// 					console.log('success : ' + dataArray2[i]);
-// 					var data = digitalRounder(dataArray2[i],53);
-// 					sumData.push = data;
-// 				} else {
-// 					console.log('no data : ' + dataArray2[i]);
-// 					sumData.push = 0;
-// 				}
-// 			} 
-// 		return sumData;
-// 	};
 
 
 setInterval(function(){

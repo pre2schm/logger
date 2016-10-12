@@ -88,6 +88,8 @@ angular.module('myApp.controllers', []).
         $scope.defrostDuration = Math.round(data.defrostLength/60000*1)/1;
         $scope.condenserPlateTemp = analogRounder(254,0.1);
         $scope.condenserInterfaceTemp = analogRounder(252,1);
+        $scope.defrostPlateSP = analogRounder(255,1);
+        $scope.defrostInterfaceSP = analogRounder(253,1);
         $scope.interfaceAlarm = data.digital[0][178];
         
         if ($scope.runTime > 1440){

@@ -91,6 +91,8 @@ angular.module('myApp.controllers', []).
         $scope.defrostPlateSP = analogRounder(255,1);
         $scope.defrostInterfaceSP = analogRounder(253,1);
         $scope.interfaceAlarm = data.digital[0][178];
+
+
         
         if ($scope.runTime > 1440){
           var days = Math.floor($scope.runTime/1440);
@@ -146,6 +148,19 @@ angular.module('myApp.controllers', []).
           $scope.comp = "Transition to Defrost";
         } else if (compState === 5){
           $scope.comp = "Defrost";
+          $scope.minInterfaceTemp = 100;
+          $scope.minPlateTemp = 100;
+          if($scope.condenserInterfaceTemp < $scope.minInterfaceTemp){
+
+            $scope.minInterfaceTemp = $scope.condenserInterfaceTemp;
+          }
+
+          if($scope.condenserPlateTemp < $scope.minPlateTemp){
+
+            $scope.minPlateTemp = $scope.condenserPlateTemp;
+          }
+
+
         } else if (compState === 6){
           $scope.comp = "Waiting";
         } else if (compState === 7){

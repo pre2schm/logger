@@ -23,8 +23,7 @@ angular.module('myApp.controllers', []).
   }).
   controller('templateCtrl', function ($scope, $http, $timeout, $routeParams) {
     // write Ctrl here
-$scope.minInterfaceTemp = 100;
-          $scope.minPlateTemp = 100;
+ 
     $scope.clickOn = 0;
     $scope.clickOnFunction = function(){
       $scope.clickOn++;
@@ -97,9 +96,11 @@ $scope.minInterfaceTemp = 100;
         $scope.defrostPlateSP = analogRounder(255,1);
         $scope.defrostInterfaceSP = analogRounder(253,1);
         $scope.interfaceAlarm = data.digital[0][178];
-        $scope.condPlateTemp = data.condPlateTemps[0];
-        $scop.condIntTemp = data.condTempInts[0];
 
+        
+        
+        $scope.minInterfaceTemp = data.condIntTemps[0];
+        $scope.minPlateTemp = data.condPlateTemps[0];
 
         
         if ($scope.runTime > 1440){
@@ -143,30 +144,22 @@ $scope.minInterfaceTemp = 100;
           $scope.defrost = "LOP Recovery";
         }
 
+       
+
         var compState = analogRounder(133,10);
+
         if(compState === 0){
           $scope.comp = "OFF";
         } else if (compState === 1){
           $scope.comp = "Cooling";
         } else if (compState === 2){
           $scope.comp = "Heating";
-          
-
         } else if (compState === 3){
           $scope.comp = "Alarm";
         } else if (compState === 4){
           $scope.comp = "Transition to Defrost";
         } else if (compState === 5){
           $scope.comp = "Defrost";
-          
-         
-
-            $scope.minInterfaceTemp = $scope.condIntTemp;
-
-            $scope.minPlateTemp = $scope.condPlateTemp
-         
-
-
         } else if (compState === 6){
           $scope.comp = "Waiting";
         } else if (compState === 7){

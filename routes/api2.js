@@ -77,6 +77,18 @@ function webboardData(a){
 	    dataRound = Math.round(((dataNew.analog[0][index-1])*scale)*10)/10;
 	    return dataRound;
 	};
+	function analogRounderPrevious(index,scale){
+	    var dataRound;
+	    dataRound = Math.round(((dataNew.analog[1][index-1])*scale)*10)/10;
+	    return dataRound;
+	};
+
+	function integerRounder(index,scale){
+	    var dataRound;
+	    dataRound = Math.round(((dataNew.integer[0][index-1])*scale)*10)/10;
+	    return dataRound;
+	};
+
 	var data = 'loading...';
 	var dataNew ={ 	analog: [['1','2'],['11','12']],
 					digital: [[1],[2]],
@@ -84,7 +96,9 @@ function webboardData(a){
 					defrostElapse: [],
 					runDuration: [],
 					defrostLength: [],
-					dataTime:[]
+					dataTime:[],
+					condPlateTemps:[],
+					condIntTemps:[]
 					};
 	var analog =[];
 	var digital =[];
@@ -97,7 +111,16 @@ function webboardData(a){
 	var defrostStart = 0;
 	var defrostEnd =0;
 	var dataTime = 0;
-	var defrostStart1 = 0
+	var defrostStart1 = 0;
+
+	var condenserPlateTemp = 0;
+    var condenserInterfaceTemp = 0;
+    var condPlateTemps =[];
+    var condIntTemps =[];
+    var current;
+    var previousAppState;
+    var lowCondIntTemp;
+    var lowCondPlateTemp;
 
 
 // GET data from webboard
@@ -132,7 +155,12 @@ function webboardData(a){
 				dataNew.integer.unshift(integer);
 
 				// get application state
-				appState = analogRounder(133,1)
+				appState = analogRounder(133,1);
+				previousAppState = analogRounderPrevious(133,1);
+				condenserPlateTemp = integerRounder(232,0.1);
+        		condenserInterfaceTemp = analogRounder(252,1);
+        		condPlateTemps =[];
+        		condIntTemps =[];
 				
 				// calculate defrost elapse time
 				if(appState === 0.5){
@@ -143,6 +171,25 @@ function webboardData(a){
 				}else{
 					defrostElapse = (new Date).getTime() - defrostTime;
 					dataNew.defrostElapse = defrostElapse;
+				}
+
+
+				if(appState == 0.5 && previousAppState != 0.5 ){
+					lowCondPlateTemp = condenserPlateTemp;
+					lowCondIntTemp = condenserInterfaceTemp;
+				} else if (appState == 0.5 && previousAppState == 0.5){
+					if(condenserPlateTemp < lowCondPlateTemp){
+						lowCondPlateTemp = condenserPlateTemp;
+						lowCondIntTemp = condenserInterfaceTemp;
+					}
+				} else if (appState != 0.5 && previousAppState == 0.5){
+					condPlateTemps.unshift(lowCondPlateTemp);
+					condIntTemps.unshift(lowCondIntTemp);
+					if(condPlateTemps >9){
+						condPlateTemps.pop();
+						condIntTemps.pop();
+					}
+
 				}
 
 				// calculate run duration
@@ -171,6 +218,9 @@ function webboardData(a){
 
 				// add timestamp to data
 				dataNew.dataTime = (new Date).getTime();
+
+				dataNew.condPlateTemps = condPlateTemps;
+				dataNew.condIntTemps = condIntTemps;
            
         });
 

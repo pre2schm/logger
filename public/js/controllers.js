@@ -97,6 +97,8 @@ $scope.minInterfaceTemp = 100;
         $scope.defrostPlateSP = analogRounder(255,1);
         $scope.defrostInterfaceSP = analogRounder(253,1);
         $scope.interfaceAlarm = data.digital[0][178];
+        $scope.condPlateTemp = data.condPlateTemps[0];
+        $scop.condIntTemp = data.condTempInts[0];
 
 
         
@@ -157,15 +159,12 @@ $scope.minInterfaceTemp = 100;
         } else if (compState === 5){
           $scope.comp = "Defrost";
           
-          if($scope.condenserInterfaceTemp < $scope.minInterfaceTemp){
+         
 
-            $scope.minInterfaceTemp = $scope.condenserInterfaceTemp;
-          }
+            $scope.minInterfaceTemp = $scope.condIntTemp;
 
-          if($scope.condenserPlateTemp < $scope.minPlateTemp){
-
-            $scope.minPlateTemp = $scope.condenserPlateTemp;
-          }
+            $scope.minPlateTemp = $scope.condPlateTemp
+         
 
 
         } else if (compState === 6){
